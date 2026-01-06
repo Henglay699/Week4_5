@@ -1,0 +1,1 @@
+from .role_perm_decorator import role_required, permission_required

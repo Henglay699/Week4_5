@@ -1,0 +1,62 @@
+{% extends "layouts/base.html" %}
+{% block title %}Permission Detail: {{ permission.code }}{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('permissions.index') }}">Permissions</a></li>
+        <li class="breadcrumb-item active">{{ permission.code }}</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold text-primary">
+                    <i class="bi bi-key-fill me-2"></i>Permission Registry
+                </h5>
+                <div class="btn-group">
+                    <a href="{{ url_for('permissions.edit', permission_id=permission.id) }}" class="btn btn-sm btn-outline-warning">
+                        <i class="bi bi-pencil me-1"></i> Edit
+                    </a>
+                    <a href="{{ url_for('permissions.delete_confirm', permission_id=permission.id) }}" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-trash me-1"></i> Delete
+                    </a>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <table class="table mb-0">
+                    <tbody>
+                        <tr>
+                            <th class="bg-light ps-4" style="width: 30%;">System Code</th>
+                            <td class="ps-4"><code class="fw-bold text-danger">{{ permission.code }}</code></td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-4">Display Name</th>
+                            <td class="ps-4">{{ permission.name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-4">Module Group</th>
+                            <td class="ps-4">
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3">
+                                    {{ permission.module }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-4">Description</th>
+                            <td class="ps-4 text-muted">{{ permission.description or 'No technical documentation provided for this permission.' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer bg-white py-3 text-end">
+                <a href="{{ url_for('permissions.index') }}" class="btn btn-light border btn-sm">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Registry
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

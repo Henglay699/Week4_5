@@ -1,0 +1,58 @@
+
+{{ form.hidden_tag() }}
+
+<div class="mb-4">
+    {{ form.name.label(class="form-label fw-bold") }}
+    {{ form.name(class="form-control", placeholder="e.g., ContentManager") }}
+    {% for error in form.name.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+</div>
+
+<div class="mb-4">
+    {{ form.description.label(class="form-label fw-bold") }}
+    {{ form.description(class="form-control", rows="2", placeholder="Briefly describe what this role can do...") }}
+</div>
+
+<div class="mb-4">
+    <label class="form-label fw-bold mb-3 d-block border-bottom pb-2">
+        <i class="bi bi-check-all me-2"></i>Permission Matrix
+    </label>
+    
+    {% if form.permissions_by_module %}
+        <div class="row g-3">
+        {% for module_name, perms in form.permissions_by_module.items() %}
+            <div class="col-md-6">
+                <div class="card h-100 border bg-light-subtle">
+                    <div class="card-header bg-white py-2 fw-bold small text-primary text-uppercase letter-spacing-1">
+                        {{ module_name }} Module
+                    </div>
+                    <div class="card-body">
+                        {% for perm in perms %}
+                        <div class="form-check form-switch mb-2">
+                            <input 
+                                class="form-check-input"
+                                type="checkbox" 
+                                id="perm_{{ perm.id }}"
+                                name="{{ form.permission_ids.name }}"
+                                value="{{ perm.id }}"
+                                {% if form.permission_ids.data and perm.id in form.permission_ids.data %}checked{% endif %}
+                            >
+                            <label class="form-check-label d-block" for="perm_{{ perm.id }}">
+                                <div class="fw-semibold small">{{ perm.code }}</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">{{ perm.name }}</div>
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning small">No permissions have been defined in the system yet.</div>
+    {% endif %}
+</div>
+
+<div class="d-flex justify-content-end gap-2 border-top pt-4 mt-4">
+    <a href="{{ url_for('roles.index') }}" class="btn btn-light border px-4">Cancel</a>
+    {{ form.submit(class="btn btn-primary px-4 shadow-sm") }}
+</div>

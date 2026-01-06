@@ -1,0 +1,17 @@
+body {
+    background-color: #f5f5f5;
+}
+
+main.container {
+    max-width: 960px;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+.x-small { font-size: 0.75rem; }
+.letter-spacing-1 { letter-spacing: 1px; }
+.bg-light-subtle { background-color: #fbfcfd !important; }

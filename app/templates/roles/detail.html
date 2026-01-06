@@ -1,0 +1,70 @@
+{% extends "layouts/base.html" %}
+{% block title %}Role Detail: {{ role.name }}{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('roles.index') }}">Roles</a></li>
+        <li class="breadcrumb-item active">{{ role.name }}</li>
+    </ol>
+</nav>
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="bg-primary-subtle text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                        <i class="bi bi-shield-check display-6"></i>
+                    </div>
+                    <h4 class="fw-bold">{{ role.name }}</h4>
+                    <p class="text-muted small">{{ role.description or "No description." }}</p>
+                </div>
+                
+                <hr>
+                
+                <div class="mb-3">
+                    <label class="text-uppercase text-muted fw-bold small d-block">Created On</label>
+                    <span class="small">{{ role.created_at.strftime('%B %d, %Y') }}</span>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('roles.edit', role_id=role.id) }}" class="btn btn-primary"><i class="bi bi-pencil me-2"></i>Edit Role</a>
+                    <a href="{{ url_for('roles.delete_confirm', role_id=role.id) }}" class="btn btn-outline-danger"><i class="bi bi-trash"></i>Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-bottom py-3">
+                <h6 class="mb-0 fw-bold"><i class="bi bi-key me-2"></i>Assigned Permissions ({{ role.permissions|length }})</h6>
+            </div>
+            <div class="card-body">
+                {% if role.permissions %}
+                    <div class="row row-cols-1 row-cols-md-2 g-3">
+                        {% for perm in role.permissions %}
+                        <div class="col">
+                            <div class="p-3 border rounded bg-light-subtle h-100">
+                                <div class="d-flex justify-content-between">
+                                    <span class="badge bg-danger text-uppercase mb-2" style="font-size: 0.65rem;">{{ perm.module }}</span>
+                                    <a href="{{ url_for('permissions.detail', permission_id=perm.id) }}" class="text-muted"><i class="bi bi-arrow-right-short"></i></a>
+                                </div>
+                                <div class="fw-bold mb-1">{{ perm.code }}</div>
+                                <div class="text-muted x-small" style="font-size: 0.8rem;">{{ perm.name }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-shield-slash display-1 text-light"></i>
+                        <p class="text-muted mt-3">No permissions assigned to this role.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

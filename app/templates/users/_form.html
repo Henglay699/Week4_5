@@ -1,0 +1,65 @@
+{{ form.hidden_tag() }}
+
+<div class="row g-4">
+    <div class="col-md-8">
+        <div class="card h-100">
+            <div class="card-header bg-white py-3">
+                <h6 class="card-title mb-0 fw-bold">Personal Information</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.username.label(class="form-label small fw-bold") }}
+                        {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else "")) }}
+                        {% for error in form.username.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.full_name.label(class="form-label small fw-bold") }}
+                        {{ form.full_name(class="form-control" + (" is-invalid" if form.full_name.errors else "")) }}
+                    </div>
+                    <div class="col-12 mb-3">
+                        {{ form.email.label(class="form-label small fw-bold") }}
+                        {{ form.email(class="form-control", placeholder="name@company.com") }}
+                    </div>
+                </div>
+
+                <hr class="my-4 text-muted">
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.password.label(class="form-label small fw-bold") }}
+                        {{ form.password(class="form-control") }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.confirm_password.label(class="form-label small fw-bold") }}
+                        {{ form.confirm_password(class="form-control") }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-white py-3">
+                <h6 class="card-title mb-0 fw-bold">Access Control</h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    {{ form.role_id.label(class="form-label small fw-bold") }}
+                    {{ form.role_id(class="form-select") }}
+                </div>
+                <div class="form-check form-switch mb-0">
+                    {{ form.is_active(class="form-check-input") }}
+                    {{ form.is_active.label(class="form-check-label fw-semibold") }}
+                </div>
+                <div class="small text-muted mt-1">Inactive users cannot log into the system.</div>
+            </div>
+        </div>
+        
+        <div class="d-grid gap-2">
+            {{ form.submit(class="btn btn-primary py-2") }}
+            <a href="{{ url_for('users.index') }}" class="btn btn-light border">Cancel</a>
+        </div>
+    </div>
+</div>

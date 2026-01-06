@@ -1,0 +1,21 @@
+{% extends "layouts/base.html" %}
+{% block title %}Create Rule{% endblock %}
+
+{% block content %}
+<div class="rows">
+    <div class="col-lg-8 col-xl-7 mx-auto">
+        <div class="d-flex justify-content-between align-center mb-3">
+            <h1 class="h3 mb-0">Create Rule</h1>
+            <a href="{{ url_for('rules.index') }}" class="btn-outline-secondary btn-sm">
+                ← Back to Rules
+            </a>
+        </div>
+        
+        <div class="card">
+            <div class="card-body ">
+                {% include 'rules/_form.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

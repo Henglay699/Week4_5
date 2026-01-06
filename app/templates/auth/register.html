@@ -1,0 +1,57 @@
+{% extends "layouts/base.html" %}
+{% block title %}Create Account{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-center py-5">
+    <div class="card border-0 shadow-lg" style="max-width: 600px; width: 100%; border-radius: 1.25rem;">
+        <div class="card-body p-5">
+            <div class="mb-5">
+                <h2 class="fw-bold text-dark mb-1">Create Account</h2>
+                <p class="text-muted">Start managing your expert system with a new profile.</p>
+            </div>
+
+            <form method="POST" action="{{ url_for('auth.register') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label fw-semibold small text-uppercase text-muted">Full Name</label>
+                        <input type="text" class="form-control form-control-lg bg-light border-0" name="full_name" value="{{ full_name or ''}}" required style="border-radius: 0.75rem;">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold small text-uppercase text-muted">Username</label>
+                        <input type="text" class="form-control form-control-lg bg-light border-0" name="username" value="{{ username or ''}}" required style="border-radius: 0.75rem;">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold small text-uppercase text-muted">Email</label>
+                        <input type="email" class="form-control form-control-lg bg-light border-0" name="email" value="{{ email or ''}}" required style="border-radius: 0.75rem;">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold small text-uppercase text-muted">Password</label>
+                        <input type="password" class="form-control form-control-lg bg-light border-0" name="password" required style="border-radius: 0.75rem;">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold small text-uppercase text-muted">Confirm</label>
+                        <input type="password" class="form-control form-control-lg bg-light border-0" name="confirm_password" required style="border-radius: 0.75rem;">
+                    </div>
+                </div>
+
+
+                <button type="submit" class="btn btn-primary w-100 py-3 fw-bold shadow-sm" style="border-radius: 0.75rem;">
+                    Register Now
+                </button>
+            </form>
+
+            <div class="text-center mt-4">
+                <p class="text-muted small">Already registered? 
+                    <a href="{{ url_for('auth.login') }}" class="fw-bold text-primary text-decoration-none">Log in</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
