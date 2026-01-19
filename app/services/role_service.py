@@ -1,4 +1,4 @@
-from typing import  List, Optional
+from typing import List , Optional
 from app.models.role import Role
 from app.models.permission import Permission
 from extensions import db
@@ -55,3 +55,5 @@ class RoleService:
     def delete_role(role: Role) -> None:
         db.session.delete(role)
         db.session.commit()
+        
+    

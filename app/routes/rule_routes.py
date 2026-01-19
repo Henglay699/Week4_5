@@ -94,4 +94,4 @@ def delete(rule_id: int):
         abort(404)
     RuleService.delete_confirm_rule(rule)
     flash("Rule was deleted successfully.", "success")
-    return render_template("rules/delete_confirm.html")
+    return redirect(url_for("rules.index"))

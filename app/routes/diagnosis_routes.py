@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, flash
 from flask_login import login_required, current_user
 from app.models import Fact
 from app.forms.diagnosis_forms import DiagnosisForm
@@ -17,5 +17,6 @@ def diagnose():
         selected_ids = form.fact_ids.data
         if selected_ids:
             results = DiagnosisService.perform_diagnosis(selected_ids)
-            
+            flash("Issues is found", "success")
+    
     return render_template("diagnosis/index.html", form=form, results=results)

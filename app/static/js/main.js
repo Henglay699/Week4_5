@@ -20,3 +20,20 @@ document.addEventListener("DOMContentLoaded", () => {
     msg.className = strong ? "form-text text-success" : "form-text text-danger";
   });
 });
+
+// // Wait until the page loads
+// document.addEventListener("DOMContentLoaded", function() {
+//   // Select all alerts
+//   const alerts = document.querySelectorAll('.alert');
+//   alerts.forEach(function(alert) {
+//     // Set timeout to remove after 2 seconds (2000 ms)
+//     setTimeout(function () {
+//       // Use Bootstrap's built-in fade out
+//       alert.classList.remove('show'); // hides with fade
+//       alert.classList.add('fade');    // ensures transition
+//       // setTimeout(() => alert.remove());
+//     }, 4000);
+//   });
+// });
+
+

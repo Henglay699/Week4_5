@@ -23,8 +23,8 @@
             </a>
             {% if current_user.is_authenticated%}
             <div class="collapse navbar-collapse" id="navbarMain">
-                <ul class="navbar-nav me-auto">  
-                    {% if current_user.has_role('Admin') %}             
+                <ul class="navbar-nav me-auto">
+                    {% if current_user.has_role('Admin') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">User Management</a>
                         <ul class="dropdown-menu shadow-sm">
@@ -33,7 +33,7 @@
                             <li><a class="dropdown-item" href="{{ url_for('permissions.index') }}"><i class="bi bi-key me-2"></i>Permissions</a></li>
                         </ul>
                     </li>
-                    {% endif %} 
+                    {% endif %}
                     {% if current_user.has_role('Admin') or current_user.has_role('Expert') %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Knowledge Base</a>
@@ -41,14 +41,15 @@
                             <li><a class="dropdown-item" href="{{ url_for('rules.index') }}"><i class="bi bi-key me-2"></i>Rules</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('facts.index') }}"><i class="bi bi-key me-2"></i>Facts</a></li>
                         </ul>
-                    </li> 
-                    {% endif %}                  
+                    </li>
+                    {% endif %}
+            {% endif %}
                     <li class="nav-item">
                         <a class="nav-link fw-semibold text-warning" href="{{ url_for('diagnosis.diagnose') }}">Diagnosis</a>
                     </li>
-                    
+
                 </ul>
-            {% endif %}
+
                 <ul class="navbar-nav ms-auto align-items-center">
                     {% if current_user.is_authenticated %}
                         <li class="nav-item text-white-50 me-3 small">
@@ -56,16 +57,16 @@
                         </li>
                         <li class="nav-item">
                             <a class="btn btn-danger btn-sm" href="{{ url_for('auth.logout') }}">Sign Out</a>
-                        </li>                       
+                        </li>
                     {% else %}
                         <li class="nav-item">
                             <a class="btn btn-success btn-sm" href="{{ url_for('auth.login') }}">Sign In</a>
-                        </li>                                                 
+                        </li>
                     {% endif %}
                 </ul>
             </div>
         </div>
-  
+
     </nav>
 
     <main class="container pb-5">
