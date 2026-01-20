@@ -15,6 +15,7 @@
         .table thead th { background-color: #f1f5f9; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; color: #64748b; border-top: none; }
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top mb-4">
         <div class="container">
@@ -25,8 +26,13 @@
             <div class="collapse navbar-collapse" id="navbarMain">
                 <ul class="navbar-nav me-auto">
                     {% if current_user.has_role('Admin') %}
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold " href="#">Dashboard</a>
+                    </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">User Management</a>
+                        <a class="nav-link dropdown-toggle fw-semibold {% if request.blueprint == 'users' 
+                                    or request.blueprint == 'roles' or request.blueprint == 'permissions' %}text-warning{% endif %}" 
+                                    href="#" data-bs-toggle="dropdown">User Management</a>                           
                         <ul class="dropdown-menu shadow-sm">
                             <li><a class="dropdown-item" href="{{ url_for('users.index') }}"><i class="bi bi-people me-2"></i>Users</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('roles.index') }}"><i class="bi bi-shield-lock me-2"></i>Roles</a></li>
@@ -36,7 +42,9 @@
                     {% endif %}
                     {% if current_user.has_role('Admin') or current_user.has_role('Expert') %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Knowledge Base</a>
+                        <a class="nav-link dropdown-toggle fw-semibold btn
+                                    {% if request.blueprint == 'rules' or request.blueprint == 'facts' %}text-warning{% endif %}"
+                                     href="#" data-bs-toggle="dropdown">Knowledge Base</a>
                         <ul class="dropdown-menu shadow-sm">
                             <li><a class="dropdown-item" href="{{ url_for('rules.index') }}"><i class="bi bi-key me-2"></i>Rules</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('facts.index') }}"><i class="bi bi-key me-2"></i>Facts</a></li>
@@ -45,7 +53,8 @@
                     {% endif %}
             {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold text-warning" href="{{ url_for('diagnosis.diagnose') }}">Diagnosis</a>
+                        <a class="nav-link fw-semibold {% if request.blueprint == 'diagnosis' %}text-warning{% endif %}" 
+                        href="{{ url_for('diagnosis.diagnose') }}">Diagnosis</a>
                     </li>
 
                 </ul>

@@ -7,6 +7,18 @@ class UserService:
     @staticmethod
     def get_all() -> List[User]:
         return User.query.order_by(User.id.desc()).all()
+    
+    @staticmethod
+    def count_all_users() -> int:
+        return User.query.count()
+    
+    @staticmethod
+    def count_inactive_users() -> int:
+        return User.query.filter_by(is_active=False).count()
+    
+    @staticmethod
+    def count_active_users() -> int:
+        return User.query.filter_by(is_active=True).count()
 
     @staticmethod
     def get_by_id(user_id: int) -> Optional[User]:
