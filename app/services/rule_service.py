@@ -9,6 +9,10 @@ class RuleService:
         return Rule.query.order_by(Rule.id.asc()).all()
     
     @staticmethod
+    def count_rules() -> int:
+        return Rule.query.count()
+    
+    @staticmethod
     def get_rule_by_id(rule_id: int) -> Optional[Rule]:
         return Rule.query.get(rule_id)
     
@@ -29,7 +33,7 @@ class RuleService:
                 )
             ).all()
             
-        rule.facts = facts
+        rule.facts = [facts] # type: ignore
         
         db.session.add(rule)
         db.session.commit()
@@ -52,7 +56,7 @@ class RuleService:
                 db.select(Fact).filter(Fact.id.in_(fact_ids))
             ).all()
             
-        rule.facts = facts
+        rule.facts = facts # type: ignore
             
         db.session.add(rule)
         db.session.commit()

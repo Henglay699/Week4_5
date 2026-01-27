@@ -29,7 +29,7 @@ def login():
             login_user(user)
             if user.has_role("Admin"):
                 flash("Logged in Successgfully.","success")
-                return redirect(url_for("users.index"))
+                return redirect(url_for("dashboard.index"))
             elif user.has_role("Expert"):
                 flash("Logged in Successgfully.","success")
                 return redirect(url_for("rules.index"))

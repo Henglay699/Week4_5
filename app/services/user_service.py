@@ -11,14 +11,14 @@ class UserService:
     @staticmethod
     def count_all_users() -> int:
         return User.query.count()
+        
+    @staticmethod
+    def count_active_users() -> int:
+        return User.query.filter_by(is_active=True).count()
     
     @staticmethod
     def count_inactive_users() -> int:
         return User.query.filter_by(is_active=False).count()
-    
-    @staticmethod
-    def count_active_users() -> int:
-        return User.query.filter_by(is_active=True).count()
 
     @staticmethod
     def get_by_id(user_id: int) -> Optional[User]:
@@ -27,17 +27,17 @@ class UserService:
     @staticmethod
     def create(data: dict, password: str, role_id: Optional[int]=None) -> User:
         user = User(
-        username=data["username"],
-        email=data["email"],
-        full_name=data["full_name"] ,
-        is_active=data.get("is_active", True)
+        username=data["username"], # type: ignore
+        email=data["email"], # type: ignore
+        full_name=data["full_name"] , # type: ignore
+        is_active=data.get("is_active", True) # type: ignore
         )
         user.set_password(password)
 
         if role_id:
             role = db.session.get(Role, role_id) 
             if role:
-                user.roles = [role]
+                user.roles = [role] # type: ignore
 
         db.session.add(user)
         db.session.commit()
@@ -48,15 +48,15 @@ class UserService:
         user.username = data["username"]
         user.email = data["email"]
         user.full_name = data["full_name"]
-        user.is_active = data.get("is_active", True)
+        user.is_active = data.get("is_active", True) # type: ignore
 
         if password:
             user.set_password(password)
 
         if role_id:
-            role  = db.session.get(Role, role_id)
-            if role:
-                user.roles = [role]
+            roles  = db.session.get(Role, role_id)
+            if roles:
+                user.roles = [roles] # type: ignore
 
         db.session.commit()
         return user

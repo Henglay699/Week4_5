@@ -10,6 +10,10 @@ class RoleService:
         return Role.query.order_by(Role.name.asc()).all()
     
     @staticmethod
+    def count_roles() -> int:
+        return Role.query.count()
+
+    @staticmethod
     def get_role_by_id(role_id: int) ->  Optional[Role]:
         return Role.query.get(role_id)
     
@@ -26,7 +30,7 @@ class RoleService:
                 )
             ).all()
 
-            role.permissions = permissions
+            role.permissions = permissions  # type: ignore
 
         db.session.add(role)
         db.session.commit()
@@ -46,7 +50,7 @@ class RoleService:
                     )
                 ).all()
 
-            role.permissions = perms
+            role.permissions = perms # type: ignore
         db.session.add(role)
         db.session.commit()
         return role

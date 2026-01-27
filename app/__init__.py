@@ -13,7 +13,7 @@ def create_app(config_class: type[Config] = Config):
     csrf.init_app(app)
     login_manager.init_app(app)
 
-    login_manager.login_view = "auth.login"
+    login_manager.login_view = "auth.login" # type: ignore
     login_manager.login_message = "Please login to access this page."
     login_manager.login_message_category = "warning"
 
@@ -29,6 +29,7 @@ def create_app(config_class: type[Config] = Config):
     from app.routes.fact_routes import fact_bp
     from app.routes.rule_routes import rule_bp
     from app.routes.diagnosis_routes import diag_bp
+    from app.routes.dashboard_routes import dashboard_bp
     app.register_blueprint(user_bp)
     app.register_blueprint(role_bp)
     app.register_blueprint(permission_bp)
@@ -36,13 +37,14 @@ def create_app(config_class: type[Config] = Config):
     app.register_blueprint(fact_bp)
     app.register_blueprint(rule_bp)
     app.register_blueprint(diag_bp)
+    app.register_blueprint(dashboard_bp)
 
 
     @app.route("/")
     def home():
         if current_user.is_authenticated:
             if current_user.has_role("Admin"):
-                return redirect(url_for("users.index"))
+                return redirect(url_for("dashboard.index"))
 
             elif current_user.has_role("Expert"):
                 return redirect(url_for("facts.index"))

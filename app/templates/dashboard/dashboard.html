@@ -1,0 +1,168 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<style>
+    :root {
+        --dash-bg: #f8f9fa;
+        --card-radius: 16px;
+        --primary-gradient: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
+    }
+
+    body {
+        background-color: var(--dash-bg);
+    }
+
+    .stat-card {
+        border: none;
+        border-radius: var(--card-radius);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    .icon-box {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    .header-gradient {
+        background: var(--primary-gradient);
+        color: white;
+        padding: 40px 0 100px 50px;
+        margin-bottom: -60px;
+        border-radius: 16px;
+    }
+</style>
+
+<div class="header-gradient">
+    <div class="container">
+        <h2 class="fw-bold">Expert System Overview</h2>
+        <p class="opacity-75">Welcome back. Here is what's happening in your expert system today.</p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row g-4 mb-4">
+        <div class="col-xl-4 col-md-6">
+            <div class="card stat-card shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <div class="icon-box bg-primary bg-opacity-10 text-primary">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div class="text-end">
+                            <h6 class="text-muted mb-0 text-uppercase px-1 small fw-bold">User Base</h6>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col-6 border-end">
+                            <h2 class="fw-bold mb-0">{{ user_is_active }}</h2>
+                            <span class="text-success small fw-medium">
+                                <i class="bi bi-check-circle-fill me-1"></i>Active
+                            </span>
+                        </div>
+                        <div class="col-6 ps-4">
+                            <h2 class="fw-bold mb-0 text-secondary">{{ user_inactive }}</h2>
+                            <span class="text-muted small fw-medium">
+                                <i class="bi bi-pause-circle-fill me-1"></i>Inactive
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span class="text-muted">Total Accounts</span>
+                            <span class="fw-bold">{{ user_count }}</span>
+                        </div>
+                        <div class="progress" style="height: 6px; border-radius: 10px;">
+                            <div class="progress-bar bg-primary" role="progressbar"
+                                style="width: {{ (user_is_active / user_count * 100)|round if user_count > 0 else 0 }}%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6">
+            <div class="card stat-card shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-box bg-secondary bg-opacity-10 text-secondary me-3">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-0 text-uppercase small fw-bold">System Roles</h6>
+                            <h3 class="fw-bold mb-0">{{ role_count }}</h3>
+                        </div>
+                    </div>
+                    <p class="text-muted small mb-0 mt-2">Managing access levels</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6">
+            <div class="card stat-card shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-box bg-warning bg-opacity-10 text-warning me-3">
+                            <i class="bi bi-key"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-0 text-uppercase small fw-bold">Global Permissions</h6>
+                            <h3 class="fw-bold mb-0">{{ permission_count }}</h3>
+                        </div>
+                    </div>
+                    <p class="text-muted small mb-0 mt-2">Functional capabilities defined</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h5 class="fw-bold mb-3 mt-5">Knowledge Base Assets</h5>
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card stat-card shadow-sm border-start border-info border-5">
+                <div class="card-body p-4 d-flex align-items-center">
+                    <div class="icon-box bg-info text-white me-4 shadow-sm">
+                        <i class="bi bi-diagram-3"></i>
+                    </div>
+                    <div>
+                        <h2 class="fw-bold mb-0">{{ rule_count }}</h2>
+                        <h6 class="text-muted text-uppercase small mb-0">Active Inference Rules</h6>
+                    </div>
+                    <a href="{{ url_for('rules.index') }}" class="ms-auto btn btn-light btn-sm rounded-circle"><i
+                            class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card stat-card shadow-sm border-start border-danger border-5">
+                <div class="card-body p-4 d-flex align-items-center">
+                    <div class="icon-box bg-danger text-white me-4 shadow-sm">
+                        <i class="bi bi-cpu"></i>
+                    </div>
+                    <div>
+                        <h2 class="fw-bold mb-0">{{ fact_count }}</h2>
+                        <h6 class="text-muted text-uppercase small mb-0">Observed Facts/Symptoms</h6>
+                    </div>
+                    <a href="{{ url_for('facts.index') }}" class="ms-auto btn btn-light btn-sm rounded-circle"><i
+                            class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

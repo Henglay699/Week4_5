@@ -19,15 +19,24 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top mb-4">
         <div class="container">
-            <a class="navbar-brand fw-bold d-flex align-items-center" href="{{ url_for('diagnosis.diagnose') }}">
-                <i class="bi bi-cpu-fill me-2"></i> Expert System
-            </a>
-            {% if current_user.is_authenticated%}
+            {% if current_user.is_authenticated %}
+                {% if current_user.has_role("Admin") or current_user.has_role('Expert')%}
+                    <a class="navbar-brand fw-bold d-flex align-items-center" href="{{ url_for('dashboard.index') }}">
+                        <i class="bi bi-cpu-fill me-2"></i> Expert System
+                    </a>
+                {% endif %}             
+            {% else %}
+                <a class="navbar-brand fw-bold d-flex align-items-center" href="{{ url_for('diagnosis.diagnose') }}">
+                    <i class="bi bi-cpu-fill me-2"></i> Expert System
+                </a>               
+            {% endif %}
+
+            {% if current_user.is_authenticated %}
             <div class="collapse navbar-collapse" id="navbarMain">
                 <ul class="navbar-nav me-auto">
                     {% if current_user.has_role('Admin') %}
                     <li class="nav-item">
-                        <a class="nav-link fw-semibold " href="#">Dashboard</a>
+                        <a class="nav-link fw-semibold {% if request.blueprint == 'dashboard' %}text-warning{% endif %}" href="{{ url_for('dashboard.index') }}">Dashboard</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle fw-semibold {% if request.blueprint == 'users' 
@@ -46,8 +55,8 @@
                                     {% if request.blueprint == 'rules' or request.blueprint == 'facts' %}text-warning{% endif %}"
                                      href="#" data-bs-toggle="dropdown">Knowledge Base</a>
                         <ul class="dropdown-menu shadow-sm">
-                            <li><a class="dropdown-item" href="{{ url_for('rules.index') }}"><i class="bi bi-key me-2"></i>Rules</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('facts.index') }}"><i class="bi bi-key me-2"></i>Facts</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('rules.index') }}"><i class="bi bi-journal-text me-2"></i>Rules</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('facts.index') }}"><i class="bi bi-lightbulb me-2"></i>Facts</a></li>
                         </ul>
                     </li>
                     {% endif %}

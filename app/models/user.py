@@ -31,10 +31,10 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def has_role(self, role_name: str) -> bool:
-        return any(role.name == role_name for role in self.roles)
+        return any(role.name == role_name for role in self.roles) # type: ignore
     
     def get_permission_codes(self) -> set[str]:
-        return {perm.code for role in self.roles for perm in role.permissions}
+        return {perm.code for role in self.roles for perm in role.permissions} # type: ignore
     
     def has_permission(self, permission_code: str) -> bool:
         return permission_code in self.get_permission_codes()
@@ -43,10 +43,4 @@ class User(UserMixin, db.Model):
         return f"<User {self.username}>"
     
     
-class AnonymousUser(AnonymousUserMixin):
-    def has_role(self, role_name):
-        return False  # Anonymous users never have roles
-
-    def has_permission(self, permission_code):
-        return False  # Anonymous users never have permissions
 

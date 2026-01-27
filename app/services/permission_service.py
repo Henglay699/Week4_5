@@ -9,6 +9,10 @@ class PermissionService:
         return Permission.query.order_by(Permission.code.asc()).all()
     
     @staticmethod
+    def count_permissions() -> int:
+        return Permission.query.count()
+    
+    @staticmethod
     def get_permission_by_id(permission_id: int) -> Optional[Permission]:
         return Permission.query.get(permission_id)
 

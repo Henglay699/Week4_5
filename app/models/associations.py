@@ -18,15 +18,4 @@ rule_facts = db.Table(
     db.Column("fact_id", db.Integer, db.ForeignKey("facts.id"), primary_key=True),
 ) 
 
-# user_rules = db.Table(
-#     "user_rules",
-#     db.Column("user_id", db.Integer, db.Foreign("users.id"), primary_key=True),
-#     db.Column("rule_id", db.Integer, db.Foreign("rules.id"), primary_key=True)
-#     )
-
-# user_facts = db.Table(
-#     "user_facts",
-#     db.Column("user_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
-#     db.Column("facts_id", db.Integer, db.ForeignKey("facts.id"), primary_key=True)
-# )
 

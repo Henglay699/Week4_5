@@ -9,6 +9,10 @@ class FactService:
         return Fact.query.order_by(Fact.id.asc()).all()
     
     @staticmethod
+    def count_facts() -> int:
+        return Fact.query.count()
+    
+    @staticmethod
     def get_fact_by_id(rule_id: int) -> Optional[Fact]:
         return Fact.query.get(rule_id)
     
