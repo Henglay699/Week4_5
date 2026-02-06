@@ -63,9 +63,14 @@
                         <div class="btn-group">
                             <a href="{{ url_for('roles.edit', role_id=role.id) }}" class="btn btn-sm btn-light border"
                                 title="Edit Permissions"><i class="bi bi-gear"></i></a>
-                            <a href="{{ url_for('roles.delete_confirm', role_id=role.id) }}"
-                                class="btn btn-sm btn-light border text-danger" title="Delete"><i
-                                    class="bi bi-trash"></i></a>
+
+                            <button type="button" class="btn btn-sm btn-light border text-danger" data-bs-toggle="modal"
+                                data-bs-target="#deleteModal" data-name=""
+                                data-code="{{ role.name }} role is currently assigned to {{ role.users|length }} user{{ role.users|length >1 and 's' or '' }}."
+                                data-url="{{ url_for('roles.delete', role_id=role.id) }}"
+                                data-message="Are you sure you want to delete this role?">
+                                <i class="bi bi-trash"></i></a>
+                            </button>
                         </div>
                     </td>
                 </tr>

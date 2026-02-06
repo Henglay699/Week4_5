@@ -60,10 +60,13 @@
                                 class="btn btn-sm btn-light border" title="Edit">
                                 <i class="bi bi-pencil"></i>
                             </a>
-                            <a href="{{ url_for('permissions.delete_confirm', permission_id=perm.id) }}"
-                                class="btn btn-sm btn-light border text-danger" title="Delete">
-                                <i class="bi bi-trash"></i>
-                            </a>
+
+                            <button type="button" class="btn btn-sm btn-light border text-danger" data-bs-toggle="modal"
+                                data-bs-target="#deleteModal" data-name="{{ perm.name }}" data-code="{{ perm.code }}"
+                                data-url="{{ url_for('permissions.delete', permission_id=perm.id) }}"
+                                data-message="Are you sure you want to delete this permission?">
+                                <i class="bi bi-trash"></i></a>
+                            </button>
                         </div>
                     </td>
                 </tr>

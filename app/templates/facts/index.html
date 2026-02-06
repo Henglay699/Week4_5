@@ -35,15 +35,16 @@
             <td>{{ fact.user.username if fact.user else 'Unknown' }}</td>
             <td class="text-center">
                 <!-- Edit -->
-                <a href="{{ url_for('facts.edit', fact_id=fact.id) }}" class="btn btn-sm btn-outline-danger text-white"
+                <a href="{{ url_for('facts.edit', fact_id=fact.id) }}" class="btn btn-sm btn-light text-dark"
                     title="Edit">
-                    ✏️
+                    <i class="bi bi-pencil"></i>
                 </a>
-                <!-- Delete (go to custom delete confirmation page) -->
-                <a href="{{ url_for('facts.delete_confirm', fact_id=fact.id) }}"
-                    class="btn btn-sm btn-outline-danger text-white" title="Delete">
-                    🗑️
-                </a>
+                <button type="button" class="btn btn-sm btn-light border text-danger" data-bs-toggle="modal"
+                    data-bs-target="#deleteModal" data-name="{{ fact.name }}"
+                    data-url="{{ url_for('facts.delete', fact_id=fact.id) }}"
+                    data-message="Are you sure you want to delete this symptom?">
+                    <i class="bi bi-trash"></i></a>
+                </button>
             </td>
         </tr>
         {%endfor%}

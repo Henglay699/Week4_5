@@ -69,9 +69,14 @@
                             <a href="{{ url_for('users.edit', user_id=user.id) }}"
                                 class="btn btn-sm btn-light border text-primary" title="Edit"><i
                                     class="bi bi-pencil"></i></a>
-                            <a href="{{ url_for('users.delete_confirm', user_id=user.id) }}"
-                                class="btn btn-sm btn-light border text-danger" title="Delete"><i
-                                    class="bi bi-trash"></i></a>
+
+                            <button type="button" class="btn btn-sm btn-light border text-danger" data-bs-toggle="modal"
+                                data-bs-target="#deleteModal" data-name="{{ user.full_name }}"
+                                data-code="{{ user.username }}"
+                                data-url="{{ url_for('users.delete', user_id=user.id) }}"
+                                data-message="Are you sure you want to delete this user?">
+                                <i class="bi bi-trash"></i></a>
+                            </button>
                         </div>
                     </td>
                 </tr>

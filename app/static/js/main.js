@@ -31,11 +31,12 @@ document.addEventListener("DOMContentLoaded", function () {
       // Use Bootstrap's built-in fade out
       alert.classList.remove('show'); // hides with fade
       alert.classList.add('fade');    // ensures transition
-      // setTimeout(() => alert.remove());
+      setTimeout(() => alert.remove());
     }, 4000);
   });
 });
 
+//diagnosis page js
 document.addEventListener('DOMContentLoaded', function () {
   const searchInput = document.getElementById('symptomSearch');
   const symptomItems = document.querySelectorAll('.symptom-item');
@@ -113,4 +114,35 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   updateVisibility();
+});
+
+
+// delete action confirmation
+document.addEventListener('DOMContentLoaded', function () {
+  const deleteModal = document.getElementById('deleteModal');
+
+  if (deleteModal) {
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+      // Button that triggered the modal
+      const button = event.relatedTarget;
+
+      // Extract info from generic data-attributes
+      const name = button.getAttribute('data-name');
+      const url = button.getAttribute('data-url');
+      const customMessage = button.getAttribute('data-message');
+      const customCode = button.getAttribute('data-code');
+
+      // Find modal elements
+      const nameDisplay = deleteModal.querySelector('#itemNameDisplay');
+      const codeDisplay = deleteModal.querySelector('#itemCodeDisplay');
+      const messageDisplay = deleteModal.querySelector('#modalMessage');
+      const deleteForm = deleteModal.querySelector('#deleteForm');
+
+      // Update content dynamically
+      if (nameDisplay) nameDisplay.textContent = name;
+      if (codeDisplay) codeDisplay.textContent = customCode || '';
+      if (messageDisplay && customMessage) messageDisplay.textContent = customMessage;
+      if (deleteForm) deleteForm.action = url;
+    });
+  }
 });

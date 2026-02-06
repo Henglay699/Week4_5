@@ -1,6 +1,5 @@
 from typing import List, Dict
 from app.models import Rule, Fact
-from extensions import db
 
 class DiagnosisService:
     @staticmethod
@@ -14,18 +13,15 @@ class DiagnosisService:
             if not rule_fact_ids:
                 continue
             
-            # Find the intersection (facts both in the rule AND selected by user)
+            # Find the intersection (facts in rule AND selected by user)
             matched_facts = rule_fact_ids.intersection(user_fact_set)
             
-            if matched_facts:  # If at least ONE fact matches
+            if matched_facts:
                 match_count = len(matched_facts)
                 total_required = len(rule_fact_ids)
                 
-                # Calculate the ratio (e.g., 1 out of 2 = 0.5)
+                # Confidence = (Rule's base certainty) * (% of symptoms matched)
                 match_ratio = match_count / total_required
-                
-                # Adjust the confidence based on how many facts matched
-                # E.g., 0.80 base confidence * 0.5 ratio = 0.40 adjusted
                 adjusted_confidence = rule.confidence * match_ratio
 
                 results.append({
@@ -37,5 +33,5 @@ class DiagnosisService:
                     "matched_fact_names": [f.name for f in rule.facts if f.id in user_fact_set]
                 })
 
-        # Sort by adjusted confidence so the most likely ones are at the top
+        # Sort results: Highest adjusted confidence first
         return sorted(results, key=lambda x: x['adjusted_confidence'], reverse=True)

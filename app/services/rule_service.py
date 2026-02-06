@@ -37,7 +37,7 @@ class RuleService:
                 )
             ).all()
             
-        rule.facts = [facts] # type: ignore
+        rule.facts = facts # type: ignore
         
         db.session.add(rule)
         db.session.commit()

@@ -12,12 +12,13 @@ fact_bp = Blueprint("facts", __name__, url_prefix="/facts")
 def index():
     search_query =  request.args.get("q", "").strip()
     page = request.args.get("page", 1, type=int)
-    
+
     pagination = FactService.get_fact_all(search_query, page)
     return render_template("facts/index.html", 
                            facts=pagination.items, 
                            pagination=pagination,
-                           search_query=search_query)
+                           search_query=search_query,
+                          )
 
 
 @fact_bp.route("/<int:fact_id>/detail")
@@ -69,6 +70,7 @@ def edit(fact_id: int):
 @login_required
 @permission_required("fact.delete")
 def delete_confirm(fact_id: int):
+    
     fact = FactService.get_fact_by_id(fact_id)
     if fact is None:
         abort(404)
@@ -84,7 +86,7 @@ def delete(fact_id: int):
     fact = FactService.get_fact_by_id(fact_id)
     if fact is None:
         abort(404)
-        
+
     FactService.delete_confirm_fact(fact)
     flash("fact was deleted successfully.", "success")
     return redirect(url_for("facts.index")) 
