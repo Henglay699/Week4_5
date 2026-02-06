@@ -20,7 +20,8 @@
                 <div class="card-body">
                     <form method="POST">
                         {{ form.hidden_tag() }}
-
+                        <input type="hidden" id="isExpandedInput" name="is_expanded"
+                            value="{{ 'true' if request.form.get('is_expanded') == 'true' else 'false' }}">
                         <div class="mb-3">
                             <label class="form-label fw-bold">Select all that apply:</label>
                             <div class="fact-selector-box p-2 border rounded"
