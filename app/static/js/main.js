@@ -146,3 +146,31 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
+
+
+
+// Logout action confirmation
+document.addEventListener('DOMContentLoaded', function () {
+  const logoutModal = document.getElementById('logoutModal');
+
+  if (logoutModal) {
+    logoutModal.addEventListener('show.bs.modal', function (event) {
+      const button = event.relatedTarget; // Button that triggered the modal
+
+      // Extract info from data-attributes
+      const name = button.getAttribute('data-name');
+      const url = button.getAttribute('data-url');
+      const customMessage = button.getAttribute('data-message');
+
+      // Find modal elements
+      const nameDisplay = logoutModal.querySelector('#itemNameDisplay');
+      const messageDisplay = logoutModal.querySelector('#modalMessage');
+      const logoutForm = logoutModal.querySelector('#logoutForm');
+
+      // Update content dynamically
+      if (nameDisplay) nameDisplay.textContent = name;
+      if (messageDisplay && customMessage) messageDisplay.textContent = customMessage;
+      if (logoutForm) logoutForm.action = url;
+    });
+  }
+});
