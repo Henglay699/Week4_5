@@ -43,9 +43,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const showMoreBtn = document.getElementById('showMoreBtn');
   const isExpandedInput = document.getElementById('isExpandedInput');
 
-  const limit = 3;
-  // Initialize state from the hidden input (survives page reload)
-  let isExpanded = isExpandedInput.value === 'true';
+  const initialLimit = 10;
+  const increment = 5;
+
+  // Read the last saved limit from the hidden input, or default to 10
+  let currentLimit = parseInt(isExpandedInput.value) || initialLimit;
 
   function updateVisibility() {
     const searchTerm = searchInput.value.toLowerCase().trim();
@@ -58,10 +60,11 @@ document.addEventListener('DOMContentLoaded', function () {
       const isChecked = item.querySelector('.symptom-checkbox').checked;
 
       if (isSearching) {
+        // When searching, show all matching results
         item.style.display = matchesSearch ? 'block' : 'none';
       } else {
-        // Stay visible if: Expanded OR it's in the first 3 OR it's currently checked
-        if (isExpanded || index < limit || isChecked) {
+        // Show if: within current limit OR is checked (so user doesn't lose sight of picks)
+        if (index < currentLimit || isChecked) {
           item.style.display = 'block';
         } else {
           item.style.display = 'none';
@@ -69,34 +72,45 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    if (isSearching || symptomItems.length <= limit) {
+    // Manage "Show More" and "Show Less" button visibility
+    if (isSearching) {
       showMoreBtn.style.display = 'none';
     } else {
       showMoreBtn.style.display = 'block';
-      showMoreBtn.textContent = isExpanded ? 'Show Less' : `Show More Symptoms (+${symptomItems.length - limit})`;
+
+      // If we reached the end of the list, change text to "Show Less"
+      if (currentLimit >= symptomItems.length) {
+        showMoreBtn.textContent = `Show Less (Reset to ${initialLimit})`;
+      } else {
+        const remaining = symptomItems.length - currentLimit;
+        const nextStep = Math.min(increment, remaining);
+        showMoreBtn.textContent = `Show More (+${nextStep})`;
+      }
     }
 
-    // Update hidden input so the server knows state on next submit
-    isExpandedInput.value = isExpanded;
+    // Save current count to hidden input for Run Diagnosis persistence
+    isExpandedInput.value = currentLimit;
   }
 
   searchInput.addEventListener('input', updateVisibility);
 
   showMoreBtn.addEventListener('click', function () {
-    isExpanded = !isExpanded;
+    if (currentLimit >= symptomItems.length) {
+      // Reset if user clicks while at the end
+      currentLimit = initialLimit;
+    } else {
+      // Add 5 more
+      currentLimit += increment;
+    }
     updateVisibility();
   });
 
   clearBtn.addEventListener('click', function () {
-    // Just uncheck everything
     const checkboxes = document.querySelectorAll('.symptom-checkbox');
     checkboxes.forEach(cb => cb.checked = false);
-
-    // DO NOT reset isExpanded here. 
-    // We leave it exactly as the user had it.
+    // Keep the current limit where it is
     updateVisibility();
   });
 
-  // Run on page load
   updateVisibility();
 });
