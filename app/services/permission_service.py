@@ -5,8 +5,13 @@ from extensions import db
 class PermissionService:
 
     @staticmethod
-    def get_permission_all() -> List[Permission]:
-        return Permission.query.order_by(Permission.code.asc()).all()
+    def get_permission_all(search_query: str = "", page: int = 1, per_page: int = 10):
+        query = Permission.query.order_by(Permission.code.asc())
+        
+        if search_query:
+            query = query.filter(Permission.code.contains(search_query) | Permission.name.contains(search_query))
+        
+        return query.paginate(page=page, per_page=per_page, error_out=False)
     
     @staticmethod
     def count_permissions() -> int:

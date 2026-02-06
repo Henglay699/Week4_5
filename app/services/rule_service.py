@@ -5,8 +5,11 @@ from extensions import db
 class RuleService:
     
     @staticmethod
-    def get_rule_all() -> List[Rule]:
-        return Rule.query.order_by(Rule.id.asc()).all()
+    def get_rule_all(search_query: str, page: int, per_page: int = 10):
+        query = Rule.query.order_by(Rule.id.asc())
+        if search_query:
+            query = query.filter(Rule.title.contains(search_query) | Rule.rule_id.contains(search_query))
+        return query.paginate(page=page, per_page=per_page)
     
     @staticmethod
     def count_rules() -> int:
@@ -17,12 +20,13 @@ class RuleService:
         return Rule.query.get(rule_id)
     
     @staticmethod
-    def create_rule(data: dict, fact_ids: List[int]) -> Rule:
+    def create_rule(data: dict, fact_ids: List[int], user_id: int) -> Rule:
         rule = Rule()
         rule.rule_id = data["rule_id"]
         rule.title =  data["title"]
         rule.description = data.get("description")  or ""
         rule.category = data.get("category", "Hardware")
+        rule.user_id = user_id
         rule.solution = data["solution"]
         rule.confidence = data["confidence"]
         
@@ -40,8 +44,8 @@ class RuleService:
         return rule
     
     @staticmethod
-    def update_rule(rule: Rule, data: dict, fact_ids: List[int]) -> Rule:
-        
+    def update_rule(rule: Rule, data: dict, fact_ids: List[int], user_id: int) -> Rule:
+        rule.user_id = user_id
         rule.rule_id = data["rule_id"]
         rule.title = data["title"]
         rule.description = data.get("description") or ""

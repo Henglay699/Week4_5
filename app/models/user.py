@@ -22,6 +22,8 @@ class User(UserMixin, db.Model):
     )
 
     roles = db.relationship("Role", secondary= user_roles, back_populates="users")
+    facts = db.relationship("Fact", back_populates="user")
+    rules = db.relationship("Rule", back_populates="user")
 
     # convenience helpers
     def set_password(self, password: str) -> None:

@@ -2,14 +2,23 @@
 {% block title %}Roles Management{% endblock %}
 
 {% block content %}
-<div class="row mb-4 align-items-center">
+<div class="d-flex justify-content-between align-items-center mb-3">
     <div class="col">
         <h1 class="h4 fw-bold mb-0">System Roles</h1>
-        <p class="text-muted small mb-0">Define and manage access level permissions</p>
     </div>
+    <form action="{{ url_for('roles.index') }}" method="GET" class="d-flex ms-auto me-5">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search role..."
+                value="{{ request.args.get('q', '') }}">
+            {% if request.args.get('q') %}
+            <a href="{{ url_for('roles.index') }}" class="btn btn-outline-danger">X</a>
+            {% endif %}
+            <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
+        </div>
+    </form>
     <div class="col-auto">
         <a href="{{ url_for('roles.create') }}" class="btn btn-primary shadow-sm">
-            <i class="bi bi-shield-plus me-1"></i> New Role
+            <i class="bi bi-shield-lock-fill"></i> New Role
         </a>
     </div>
 </div>
@@ -30,10 +39,12 @@
                 <tr>
                     <td class="ps-4">
                         <div class="d-flex align-items-center">
-                            <div class="icon-box me-3 bg-primary-subtle text-primary rounded d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                            <div class="icon-box me-3 bg-primary-subtle text-primary rounded d-flex align-items-center justify-content-center"
+                                style="width: 35px; height: 35px;">
                                 <i class="bi bi-shield-lock"></i>
                             </div>
-                            <a href="{{ url_for('roles.detail', role_id=role.id) }}" class="text-decoration-none fw-bold text-dark">
+                            <a href="{{ url_for('roles.detail', role_id=role.id) }}"
+                                class="text-decoration-none fw-bold text-dark">
                                 {{ role.name }}
                             </a>
                         </div>
@@ -41,17 +52,20 @@
                     <td class="text-muted small">{{ role.description or "No description provided." }}</td>
                     <td>
                         {% if role.permissions %}
-                            <span class="badge bg-success-subtle text-success px-3">
-                                <i class="bi bi-check2-circle me-1"></i>{{ role.permissions|length }} Active Permissions
-                            </span>
+                        <span class="badge bg-success-subtle text-success px-3">
+                            <i class="bi bi-check2-circle me-1"></i>{{ role.permissions|length }} Active Permissions
+                        </span>
                         {% else %}
-                            <span class="badge bg-light text-muted px-3 border">No Permissions</span>
+                        <span class="badge bg-light text-muted px-3 border">No Permissions</span>
                         {% endif %}
                     </td>
                     <td class="text-end pe-4">
                         <div class="btn-group">
-                            <a href="{{ url_for('roles.edit', role_id=role.id) }}" class="btn btn-sm btn-light border" title="Edit Permissions"><i class="bi bi-gear"></i></a>
-                            <a href="{{ url_for('roles.delete_confirm', role_id=role.id) }}" class="btn btn-sm btn-light border text-danger" title="Delete"><i class="bi bi-trash"></i></a>
+                            <a href="{{ url_for('roles.edit', role_id=role.id) }}" class="btn btn-sm btn-light border"
+                                title="Edit Permissions"><i class="bi bi-gear"></i></a>
+                            <a href="{{ url_for('roles.delete_confirm', role_id=role.id) }}"
+                                class="btn btn-sm btn-light border text-danger" title="Delete"><i
+                                    class="bi bi-trash"></i></a>
                         </div>
                     </td>
                 </tr>
@@ -60,4 +74,19 @@
         </table>
     </div>
 </div>
+<nav>
+    <ul class="pagination justify-content-center mt-4">
+        {% for page_num in pagination.iter_pages() %}
+        {% if page_num %}
+        <li class="page-item {{ 'active' if page_num == pagination.page }}">
+            <a class="page-link" href="{{ url_for('roles.index', page=page_num, q=search_query) }}">
+                {{ page_num }}
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled"><span class="page-link">...</span></li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+</nav>
 {% endblock %}

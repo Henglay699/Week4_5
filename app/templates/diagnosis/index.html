@@ -4,6 +4,15 @@
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-4">
+            <div class="input-group mb-3">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input type="text" id="symptomSearch" class="form-control" placeholder="Search symptoms...">
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <label class="form-label fw-bold mb-0">Select all that apply:</label>
+                <button type="button" id="clearAll"
+                    class="btn btn-sm btn-link text-danger p-0 text-decoration-none">Clear All</button>
+            </div>
             <div class="card shadow-sm border-primary">
                 <div class="card-header bg-primary text-white">
                     <h5 class="mb-0">Diagnostic Input</h5>
@@ -11,16 +20,23 @@
                 <div class="card-body">
                     <form method="POST">
                         {{ form.hidden_tag() }}
-                        
+
                         <div class="mb-3">
                             <label class="form-label fw-bold">Select all that apply:</label>
-                            <div class="fact-selector-box p-2 border rounded" style="max-height: 400px; overflow-y: auto;">
+                            <div class="fact-selector-box p-2 border rounded"
+                                style="max-height: 400px; overflow-y: auto;">
                                 {% for subfield in form.fact_ids %}
-                                    <div class="form-check form-switch mb-2">
-                                        {{ subfield(class="form-check-input") }}
-                                        {{ subfield.label(class="form-check-label") }}
-                                    </div>
+                                <div class="form-check form-switch mb-2 symptom-item">
+                                    {{ subfield(class="form-check-input symptom-checkbox") }}
+                                    {{ subfield.label(class="form-check-label") }}
+                                </div>
                                 {% endfor %}
+                                <div class="text-center mt-2">
+                                    <button type="button" id="showMoreBtn" class="btn btn-sm btn-outline-primary w-100"
+                                        style="display: none;">
+                                        Show More Symptoms
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -32,48 +48,55 @@
 
         <div class="col-md-8">
             {% if results %}
-                <h3 class="mb-4">Potential Issues Found</h3>
-                {% for item in results %}
-                    <div class="card mb-4 border-start border-5 {% if item.match_count == item.total_required %}border-success{% else %}border-warning{% endif %} shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h4 class="card-title">{{ item.rule.title }}</h4>
-                                    <p class="text-muted small">
-                                        Matched {{ item.match_count }} of {{ item.total_required }} symptoms
-                                    </p>
+            <h3 class="mb-4">Potential Issues Found</h3>
+            {% for item in results %}
+            <div
+                class="card mb-4 border-start border-5 {% if item.match_count == item.total_required %}border-success{% else %}border-warning{% endif %} shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h4 class="card-title">{{ item.rule.title }}</h4>
+                            <p class="text-muted small">
+                                Matched {{ item.match_count }} of {{ item.total_required }} symptoms
+                            </p>
+                        </div>
+                        <div class="text-end" style="width: 200px;">
+                            <div class="small fw-bold mb-1">
+                                {{ item.adjusted_confidence|round|int }}% Match
+                            </div>
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar {% if item.match_count == item.total_required %}bg-success{% else %}bg-warning{% endif %}"
+                                    role="progressbar" style="width: {{ item.adjusted_confidence }}%">
                                 </div>
-                                <div class="text-end">
-                                    <span class="badge {% if item.match_count == item.total_required %}bg-success{% else %}bg-warning text-dark{% endif %} p-2">
-                                        {{ item.adjusted_confidence|round|int }}% Probability
-                                    </span>
-                                    <div class="small text-muted">Base Confidence: {{ item.base_confidence|int }}%</div>
-                                </div>
                             </div>
-                        
-                            <div class="mb-3">
-                                <span class="small fw-bold">Matched symptoms:</span>
-                                {% for name in item.matched_fact_names %}
-                                    <span class="badge rounded-pill bg-light text-dark border">{{ name }}</span>
-                                {% endfor %}
-                            </div>
-                        
-                            <div class="mt-3">
-                                <h6><strong>Troubleshooting Steps:</strong></h6>
-                                <div class="bg-light p-3 rounded border" style="white-space: pre-wrap;">{{ item.rule.solution }}</div>
-                            </div>
+                            <div class="small text-muted mt-1">Base: {{ item.base_confidence|int }}%</div>
                         </div>
                     </div>
-                {% endfor %}
+
+                    <div class="mb-3">
+                        <span class="small fw-bold">Matched symptoms:</span>
+                        {% for name in item.matched_fact_names %}
+                        <span class="badge rounded-pill bg-light text-dark border">{{ name }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mt-3">
+                        <h6><strong>Troubleshooting Steps:</strong></h6>
+                        <div class="bg-light p-3 rounded border" style="white-space: pre-wrap;">{{ item.rule.solution }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
             {% elif results == [] %}
-                <div class="alert alert-warning">
-                    No matching rules found for the selected symptoms.
-                </div>
+            <div class="alert alert-warning">
+                No matching rules found for the selected symptoms.
+            </div>
             {% else %}
-                <div class="text-center mt-5">
-                    <h3 class="text-muted">Ready to Diagnose</h3>
-                    <p>Select symptoms from the sidebar and click "Run Diagnosis".</p>
-                </div>
+            <div class="text-center mt-5">
+                <h3 class="text-muted">Ready to Diagnose</h3>
+                <p>Select symptoms from the sidebar and click "Run Diagnosis".</p>
+            </div>
             {% endif %}
         </div>
     </div>

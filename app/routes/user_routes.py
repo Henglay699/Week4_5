@@ -2,6 +2,7 @@ from flask import (
     Blueprint,
     render_template,
     redirect,
+    request,
     url_for,
     flash,
     abort,
@@ -17,8 +18,14 @@ user_bp = Blueprint("users", __name__, url_prefix="/users")
 @login_required
 @role_required("Admin")
 def index():
-    users = UserService.get_all()
-    return render_template("users/index.html", users=users)
+    search_query = request.args.get("q", "")
+    page = request.args.get("page", 1, type=int)
+    pagination = UserService.get_all(search_query=search_query, page=page)
+    return render_template("users/index.html", 
+                           users=pagination.items, 
+                           pagination=pagination,
+                           search_query=search_query)
+
 
 @user_bp.route("/<int:user_id>")
 @login_required

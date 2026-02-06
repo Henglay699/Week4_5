@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, abort
-from flask_login import login_required
+from flask import Blueprint, render_template, redirect, request, url_for, flash, abort
+from flask_login import current_user, login_required
 from app.services import RuleService
 from app.forms.rule_forms import RuleCreateForm, RuleEditForm, RuleDeleteConfirm
 from app.decorator_method import role_required, permission_required
@@ -10,8 +10,15 @@ rule_bp = Blueprint("rules", __name__, url_prefix="/rules")
 @login_required
 @role_required("Admin", "Expert")
 def index():
-    rules = RuleService.get_rule_all()
-    return render_template("rules/index.html", rules=rules)
+    
+    search_query =  request.args.get("q", "").strip()
+    page = request.args.get("page", 1, type=int)
+    
+    pagination = RuleService.get_rule_all(search_query, page)
+    return render_template("rules/index.html", 
+                           rules=pagination.items, 
+                           pagination=pagination,
+                           search_query=search_query)
 
 
 @rule_bp.route("/<int:rule_id>/detail")
@@ -40,7 +47,7 @@ def create():
         }
         fact_ids = form.fact_ids.data or []
         
-        rule = RuleService.create_rule(data, fact_ids)
+        rule = RuleService.create_rule(data, fact_ids,  current_user.id)
         flash(f"Rule '{rule.rule_id}' was created succesfully.", "success")
         return redirect(url_for("rules.index"))
     return render_template("rules/create.html", form=form)
@@ -67,7 +74,7 @@ def edit(rule_id: int):
         }
         fact_ids = form.fact_ids.data or []
         
-        rule = RuleService.update_rule(rule, data, fact_ids)
+        rule = RuleService.update_rule(rule, data, fact_ids, current_user.id)
         flash(f"Rule '{rule.rule_id}' was updated succesfully.", "success")
         return redirect(url_for("rules.index"))
     return render_template("rules/edit.html", form=form, rule=rule)

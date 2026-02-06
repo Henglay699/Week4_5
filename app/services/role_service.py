@@ -6,8 +6,11 @@ from extensions import db
 class RoleService:
 
     @staticmethod
-    def get_role_all() -> List[Role]:
-        return Role.query.order_by(Role.name.asc()).all()
+    def get_role_all(search_query: str = "", page: int = 1, per_page: int = 10):
+        query = Role.query.order_by(Role.name.asc())
+        if search_query:
+            query = query.filter(Role.name.contains(search_query))
+        return query.paginate(page=page, per_page=per_page, error_out=False)
     
     @staticmethod
     def count_roles() -> int:

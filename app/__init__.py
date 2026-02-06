@@ -2,7 +2,7 @@ from flask import Flask, redirect, url_for, render_template
 from flask_login import LoginManager, logout_user, current_user
 from app.decorator_method import role_required, permission_required
 from config import Config
-from extensions import db, csrf, login_manager
+from extensions import db, csrf, login_manager, migrate
 from app.models.user import User
 
 def create_app(config_class: type[Config] = Config):
@@ -11,6 +11,7 @@ def create_app(config_class: type[Config] = Config):
 
     db.init_app(app)
     csrf.init_app(app)
+    migrate.init_app(app, db)
     login_manager.init_app(app)
 
     login_manager.login_view = "auth.login" # type: ignore

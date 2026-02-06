@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, abort
+from flask import Blueprint, render_template, redirect, request, url_for, flash, abort
 from flask_login import login_required
 from app.forms.permission_forms import (PermissionCreateForm, PermissionEditForm, PermissionConfirmDeleteForm)
 from app.services.permission_service import PermissionService
@@ -10,8 +10,14 @@ permission_bp = Blueprint("permissions", __name__, url_prefix="/permissions")
 @role_required("Admin")
 @login_required
 def index():
-    permissions = PermissionService.get_permission_all()
-    return render_template("permissions/index.html", permissions=permissions)
+    search_query = request.args.get("q", "")
+    page = request.args.get("page", 1, type=int)
+    
+    pagination = PermissionService.get_permission_all(search_query, page)
+    return render_template("permissions/index.html", 
+                           permissions=pagination.items, 
+                           pagination=pagination,
+                           search_query=search_query,)
 
 @permission_bp.route("/<int:permission_id>/detail")   
 @login_required

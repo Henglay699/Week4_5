@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, abort
+from flask import Blueprint, render_template, redirect, request, url_for, flash, abort
 from flask_login import login_required
 from app.forms.role_forms import (RoleCreateForm, RoleEditForm, RoleConfirmDeleteForm)
 from app.services.role_service import RoleService
@@ -10,8 +10,14 @@ role_bp = Blueprint("roles", __name__, url_prefix="/roles")
 @login_required
 @role_required("Admin")
 def index():
-    roles = RoleService.get_role_all()
-    return render_template("roles/index.html", roles=roles)
+    search_query = request.args.get("q", "")
+    page = request.args.get("page", 1, type=int)
+    
+    pagination = RoleService.get_role_all(search_query=search_query, page=page)
+    return render_template("roles/index.html", 
+                           roles=pagination.items, 
+                           pagination=pagination,
+                           search_query=search_query)
 
 @role_bp.route("/<int:role_id>")
 @login_required

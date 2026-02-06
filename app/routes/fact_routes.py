@@ -1,5 +1,5 @@
-from flask import Blueprint, url_for, redirect, flash, render_template, abort
-from flask_login import login_required
+from flask import Blueprint, request, url_for, redirect, flash, render_template, abort
+from flask_login import login_required, current_user
 from app.decorator_method import role_required, permission_required
 from app.forms.fact_forms import FactCreateForm, FactDeleteConfirm, FactEditForm
 from app.services.fact_service import FactService
@@ -10,8 +10,14 @@ fact_bp = Blueprint("facts", __name__, url_prefix="/facts")
 @login_required
 @role_required("Admin", "Expert")
 def index():
-    facts = FactService.get_fact_all()
-    return render_template("facts/index.html", facts=facts)
+    search_query =  request.args.get("q", "").strip()
+    page = request.args.get("page", 1, type=int)
+    
+    pagination = FactService.get_fact_all(search_query, page)
+    return render_template("facts/index.html", 
+                           facts=pagination.items, 
+                           pagination=pagination,
+                           search_query=search_query)
 
 
 @fact_bp.route("/<int:fact_id>/detail")
@@ -33,7 +39,7 @@ def create():
         data = {
             "name": form.name.data
         }
-        FactService.create_fact(data)
+        FactService.create_fact(data, current_user.id)
         flash("fact created successfully.", "success")
         return redirect(url_for("facts.index"))
         
@@ -53,7 +59,7 @@ def edit(fact_id: int):
         data = {
             "name": form.name.data
         }
-        FactService.update_fact(fact, data)
+        FactService.update_fact(fact, data, current_user.id)
         flash("facts updated successfully.", "success")
         return redirect(url_for("facts.index"))
     return render_template("facts/edit.html", form=form, fact=fact)

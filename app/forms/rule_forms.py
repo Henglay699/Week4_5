@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.form import _Auto
-from wtforms import StringField, SubmitField, SelectField, TextAreaField, FloatField
+from wtforms import StringField, SubmitField, SelectField, TextAreaField, FloatField, BooleanField
 from app.forms.multi_checkbox_field import Multi_Checkbox_Field
 from wtforms.validators import DataRequired, Length, ValidationError, InputRequired
 from collections import defaultdict
@@ -72,6 +72,8 @@ class RuleCreateForm(FlaskForm):
         render_kw={"placeholder": "Enter confidence in percentage E.G (0.85)"}
     )
     
+    is_active = BooleanField("Active", default=True)
+    
     submit = SubmitField("Save Rule")
     
     
@@ -141,6 +143,8 @@ class RuleEditForm(FlaskForm):
         validators=[DataRequired()],
         render_kw={"placeholder": "Enter confidence in percentage E.G (0.85)"}
     )
+    
+    is_active = BooleanField("Active", default=True)
     
     submit = SubmitField("Update Rule")
     

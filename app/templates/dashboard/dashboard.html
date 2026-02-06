@@ -46,7 +46,6 @@
 <div class="header-gradient">
     <div class="container">
         <h2 class="fw-bold">Expert System Overview</h2>
-        <p class="opacity-75">Welcome back. Here is what's happening in your expert system today.</p>
     </div>
 </div>
 
@@ -98,7 +97,7 @@
             <div class="card stat-card shadow-sm">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box bg-secondary bg-opacity-10 text-secondary me-3">
+                        <div class="icon-box bg-secondary bg-opacity-10 text-success me-3">
                             <i class="bi bi-shield-check"></i>
                         </div>
                         <div>
@@ -119,7 +118,7 @@
                             <i class="bi bi-key"></i>
                         </div>
                         <div>
-                            <h6 class="text-muted mb-0 text-uppercase small fw-bold">Global Permissions</h6>
+                            <h6 class="text-muted mb-0 text-uppercase small fw-bold">Permissions</h6>
                             <h3 class="fw-bold mb-0">{{ permission_count }}</h3>
                         </div>
                     </div>
@@ -129,18 +128,18 @@
         </div>
     </div>
 
-    <h5 class="fw-bold mb-3 mt-5">Knowledge Base Assets</h5>
+    <h5 class="fw-bold mb-3 mt-5">Knowledge Base</h5>
 
     <div class="row g-4">
         <div class="col-md-6">
             <div class="card stat-card shadow-sm border-start border-info border-5">
                 <div class="card-body p-4 d-flex align-items-center">
                     <div class="icon-box bg-info text-white me-4 shadow-sm">
-                        <i class="bi bi-diagram-3"></i>
+                        <i class="bi bi-journal-text"></i>
                     </div>
                     <div>
                         <h2 class="fw-bold mb-0">{{ rule_count }}</h2>
-                        <h6 class="text-muted text-uppercase small mb-0">Active Inference Rules</h6>
+                        <h6 class="text-muted big mb-0">Active Inference Rules</h6>
                     </div>
                     <a href="{{ url_for('rules.index') }}" class="ms-auto btn btn-light btn-sm rounded-circle"><i
                             class="bi bi-arrow-right"></i></a>
@@ -156,7 +155,7 @@
                     </div>
                     <div>
                         <h2 class="fw-bold mb-0">{{ fact_count }}</h2>
-                        <h6 class="text-muted text-uppercase small mb-0">Observed Facts/Symptoms</h6>
+                        <h6 class="text-muted big mb-0">Observed Facts/Symptoms</h6>
                     </div>
                     <a href="{{ url_for('facts.index') }}" class="ms-auto btn btn-light btn-sm rounded-circle"><i
                             class="bi bi-arrow-right"></i></a>

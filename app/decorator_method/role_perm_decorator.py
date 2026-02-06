@@ -8,7 +8,6 @@ def role_required(*rolenames):
         def wrapped(*args, **kwargs):
             if not any(current_user.has_role(role) for role in rolenames):
                 abort(403)
-                flash("You don't have accesss to this pages. Please login with a credible account")
             return fn(*args, **kwargs)
         return wrapped
     return decorator

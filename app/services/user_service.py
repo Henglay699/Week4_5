@@ -5,8 +5,17 @@ from extensions import db
 
 class UserService:
     @staticmethod
-    def get_all() -> List[User]:
-        return User.query.order_by(User.id.desc()).all()
+    def get_all(search_query: str = "", page: int = 1, per_page: int = 10):
+        query = User.query.order_by(User.id.desc())
+        if search_query:
+            query = query.filter(
+                db.or_(
+                    User.username.contains(search_query),
+                    User.email.contains(search_query),
+                    User.full_name.contains(search_query)
+                )
+            )
+        return query.paginate(page=page, per_page=per_page, error_out=False)
     
     @staticmethod
     def count_all_users() -> int:
