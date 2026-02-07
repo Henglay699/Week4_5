@@ -63,7 +63,7 @@
                         </div>
                         <div class="text-end" style="width: 200px;">
                             <div class="small fw-bold mb-1">
-                                {{ item.adjusted_confidence }}% Match
+                                {{ "%.2f"|format(item.adjusted_confidence) }}% Match
                             </div>
                             <div class="progress" style="height: 10px;">
                                 <div class="progress-bar {% if item.match_count == item.total_required %}bg-success{% else %}bg-warning{% endif %}"
