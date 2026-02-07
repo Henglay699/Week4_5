@@ -44,8 +44,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const showMoreBtn = document.getElementById('showMoreBtn');
   const isExpandedInput = document.getElementById('isExpandedInput');
 
-  const initialLimit = 10;
-  const increment = 5;
+  const initialLimit = 13;
+  const increment = 15;
 
   // Read the last saved limit from the hidden input, or default to 10
   let currentLimit = parseInt(isExpandedInput.value) || initialLimit;
